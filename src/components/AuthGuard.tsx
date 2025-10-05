@@ -5,7 +5,7 @@ interface AuthGuardProps {
   children: React.ReactNode;
 }
 
-const ACCESS_CODE = '1234'; // In a real app, this should be configurable or from environment
+const ACCESS_CODE = import.meta.env.VITE_ACCESS_CODE;
 
 export default function AuthGuard({ children }: AuthGuardProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
