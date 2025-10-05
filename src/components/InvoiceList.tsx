@@ -74,9 +74,9 @@ export default function InvoiceList({ onViewInvoice }: { onViewInvoice: (invoice
             key={invoice.id}
             className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
                   <h3 className="text-lg font-semibold text-gray-900">{invoice.invoice_number}</h3>
                   {getStatusBadge(invoice.status)}
                 </div>
@@ -86,14 +86,14 @@ export default function InvoiceList({ onViewInvoice }: { onViewInvoice: (invoice
                   <p><span className="font-medium">Échéance:</span> {formatDate(invoice.due_date)}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-6">
-                <div className="text-right">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                <div className="text-left sm:text-right">
                   <p className="text-2xl font-bold text-gray-900">{invoice.total.toFixed(2)} €</p>
                   <p className="text-sm text-gray-500">TTC</p>
                 </div>
                 <button
                   onClick={() => onViewInvoice(invoice.id)}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] text-base"
                 >
                   <Eye size={20} />
                   Voir

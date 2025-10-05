@@ -27,7 +27,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-4 sm:py-8">
         <header className="mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -35,15 +35,15 @@ function App() {
                 <FileText className="text-white" size={32} />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Générateur de Factures</h1>
-                <p className="text-gray-600">Créez et gérez vos factures professionnelles</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Générateur de Factures</h1>
+                <p className="text-sm sm:text-base text-gray-600">Créez et gérez vos factures professionnelles</p>
               </div>
             </div>
             {currentView !== 'list' && (
-              <button
-                onClick={handleBackToList}
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-white rounded-lg transition-colors"
-              >
+            <button
+              onClick={handleBackToList}
+              className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 text-gray-700 hover:bg-white rounded-lg transition-colors min-h-[44px] text-base"
+            >
                 <ArrowLeft size={20} />
                 Retour
               </button>
@@ -68,8 +68,8 @@ function App() {
           )}
 
           {currentView === 'create' && (
-            <div className="bg-white rounded-lg shadow-sm p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Créer une nouvelle facture</h2>
+            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Créer une nouvelle facture</h2>
               <InvoiceForm onInvoiceCreated={handleInvoiceCreated} />
             </div>
           )}

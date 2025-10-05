@@ -1,11 +1,9 @@
-# TODO: Add Access Code Authentication
+# TODO: Améliorer la responsivité mobile du site
 
-- [x] Create AuthGuard component with code input interface
-- [x] Implement code validation logic (default code: 1234)
-- [x] Add localStorage persistence for authentication state
-- [x] Wrap App component with AuthGuard in main.tsx
-- [x] Add logout functionality with button in top-right corner
-- [ ] Test authentication flow and persistence
-- [x] Add margin between header bar and content
-- [x] Allow manual input of invoice number
-- [x] Ensure PDF fits on single page without blank pages
+## Étapes à compléter
+
+- [x] Améliorer la taille des boutons dans InvoiceForm.tsx (min 44px hauteur)
+- [x] Ajuster les inputs et espacements dans InvoiceForm.tsx pour mobile
+- [x] Optimiser les cartes dans InvoiceList.tsx pour mobile
+- [x] Ajuster les espacements dans App.tsx pour mobile
+- [ ] Tester la responsivité sur mobile

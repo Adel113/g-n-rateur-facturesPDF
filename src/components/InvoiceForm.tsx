@@ -149,7 +149,7 @@ export default function InvoiceForm({ onInvoiceCreated }: { onInvoiceCreated: (i
                 required
                 value={formData.company_last_name}
                 onChange={(e) => setFormData({ ...formData, company_last_name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm"
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded focus:ring-2 focus:ring-gray-900 focus:border-transparent text-sm sm:text-base min-h-[44px]"
               />
             </div>
             <div>
@@ -264,7 +264,7 @@ export default function InvoiceForm({ onInvoiceCreated }: { onInvoiceCreated: (i
           <button
             type="button"
             onClick={addItem}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition-colors text-sm"
+            className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-gray-900 text-white rounded hover:bg-gray-800 transition-colors text-sm sm:text-base min-h-[44px]"
           >
             <Plus size={18} />
             Ajouter
@@ -459,7 +459,7 @@ export default function InvoiceForm({ onInvoiceCreated }: { onInvoiceCreated: (i
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3 bg-gray-900 text-white font-semibold rounded hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 sm:py-4 bg-gray-900 text-white font-semibold rounded hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] text-base"
       >
         {loading ? 'Création en cours...' : 'Créer la facture'}
       </button>
