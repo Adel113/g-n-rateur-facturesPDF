@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { FileText, Eye } from 'lucide-react';
-import { supabase, type Invoice } from '../lib/supabase';
+import { FileText, Eye, Trash2 } from 'lucide-react';
+import { getInvoices, deleteInvoice, deleteInvoiceItems, type Invoice } from '../lib/firestore';
 
 export default function InvoiceList({ onViewInvoice }: { onViewInvoice: (invoiceId: string) => void }) {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -12,17 +12,25 @@ export default function InvoiceList({ onViewInvoice }: { onViewInvoice: (invoice
 
   const loadInvoices = async () => {
     try {
-      const { data, error } = await supabase
-        .from('invoices')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setInvoices(data || []);
+      const data = await getInvoices();
+      setInvoices(data);
     } catch (error) {
       console.error('Error loading invoices:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteInvoice = async (invoiceId: string) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette facture ? Cette action est irréversible.')) {
+      try {
+        await deleteInvoiceItems(invoiceId);
+        await deleteInvoice(invoiceId);
+        setInvoices(invoices.filter(invoice => invoice.id !== invoiceId));
+      } catch (error) {
+        console.error('Error deleting invoice:', error);
+        alert('Erreur lors de la suppression de la facture.');
+      }
     }
   };
 
@@ -91,13 +99,22 @@ export default function InvoiceList({ onViewInvoice }: { onViewInvoice: (invoice
                   <p className="text-2xl font-bold text-gray-900">{invoice.total.toFixed(2)} €</p>
                   <p className="text-sm text-gray-500">TTC</p>
                 </div>
-                <button
-                  onClick={() => onViewInvoice(invoice.id)}
-                  className="flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] text-base"
-                >
-                  <Eye size={20} />
-                  Voir
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => onViewInvoice(invoice.id)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] text-base"
+                  >
+                    <Eye size={20} />
+                    Voir
+                  </button>
+                  <button
+                    onClick={() => handleDeleteInvoice(invoice.id)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 sm:px-6 sm:py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors min-h-[44px] text-base"
+                  >
+                    <Trash2 size={20} />
+                    Supprimer
+                  </button>
+                </div>
               </div>
             </div>
           </div>

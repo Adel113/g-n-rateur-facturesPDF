@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { createInvoice, createInvoiceItem } from '../lib/firestore';
 
 type InvoiceFormData = {
   company_first_name: string;
@@ -94,25 +94,19 @@ export default function InvoiceForm({ onInvoiceCreated }: { onInvoiceCreated: (i
 
       const { legal_text, ...invoiceData } = formData;
 
-      const { data: invoice, error: invoiceError } = await supabase
-        .from('invoices')
-        .insert({
-          invoice_number: invoiceNumber,
-          ...invoiceData,
-          subtotal: total,
-          tax_amount: 0,
-          tax_rate: 0,
-          total: total,
-          status: 'draft',
-          notes: legal_text,
-        })
-        .select()
-        .single();
-
-      if (invoiceError) throw invoiceError;
+      const invoiceId = await createInvoice({
+        invoice_number: invoiceNumber,
+        ...invoiceData,
+        subtotal: total,
+        tax_amount: 0,
+        tax_rate: 0,
+        total: total,
+        status: 'draft',
+        notes: legal_text,
+      });
 
       const invoiceItems = items.map(item => ({
-        invoice_id: invoice.id,
+        invoice_id: invoiceId,
         description: item.description,
         item_date: item.item_date,
         quantity: item.quantity,
@@ -121,13 +115,9 @@ export default function InvoiceForm({ onInvoiceCreated }: { onInvoiceCreated: (i
         details: item.details,
       }));
 
-      const { error: itemsError } = await supabase
-        .from('invoice_items')
-        .insert(invoiceItems);
+      await Promise.all(invoiceItems.map(item => createInvoiceItem(item)));
 
-      if (itemsError) throw itemsError;
-
-      onInvoiceCreated(invoice.id);
+      onInvoiceCreated(invoiceId);
     } catch (error) {
       console.error('Error creating invoice:', error);
       alert('Erreur lors de la création de la facture');

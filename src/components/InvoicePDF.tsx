@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Printer, Loader2 } from 'lucide-react';
-import { supabase, type Invoice, type InvoiceItem } from '../lib/supabase';
+import { getInvoice, getInvoiceItems, updateInvoice, type Invoice, type InvoiceItem } from '../lib/firestore';
 
 type InvoiceWithItems = Invoice & {
   items: InvoiceItem[];
@@ -18,20 +18,10 @@ export default function InvoicePDF({ invoiceId }: { invoiceId: string }) {
 
   const loadInvoice = async () => {
     try {
-      const { data: invoiceData, error: invoiceError } = await supabase
-        .from('invoices')
-        .select('*')
-        .eq('id', invoiceId)
-        .single();
+      const invoiceData = await getInvoice(invoiceId);
+      if (!invoiceData) throw new Error('Invoice not found');
 
-      if (invoiceError) throw invoiceError;
-
-      const { data: itemsData, error: itemsError } = await supabase
-        .from('invoice_items')
-        .select('*')
-        .eq('invoice_id', invoiceId);
-
-      if (itemsError) throw itemsError;
+      const itemsData = await getInvoiceItems(invoiceId);
 
       setInvoice({ ...invoiceData, items: itemsData });
     } catch (error) {
@@ -49,12 +39,7 @@ export default function InvoicePDF({ invoiceId }: { invoiceId: string }) {
     if (!customInvoiceNumber || !invoice || customInvoiceNumber === invoice.invoice_number.replace('INV-', '')) return;
 
     try {
-      const { error } = await supabase
-        .from('invoices')
-        .update({ invoice_number: `INV-${customInvoiceNumber}` })
-        .eq('id', invoiceId);
-
-      if (error) throw error;
+      await updateInvoice(invoiceId, { invoice_number: `INV-${customInvoiceNumber}` });
 
       // Update local state
       setInvoice(prev => prev ? { ...prev, invoice_number: `INV-${customInvoiceNumber}` } : null);
